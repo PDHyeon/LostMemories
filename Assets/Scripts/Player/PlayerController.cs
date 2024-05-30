@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     public Action quickSlot;
     private Rigidbody _rigidbody;
 
+    private Vector3 accVector;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -58,7 +60,7 @@ public class PlayerController : MonoBehaviour
         dir *= moveSpeed;
         dir.y = _rigidbody.velocity.y;
 
-        _rigidbody.velocity = dir;
+        _rigidbody.velocity = dir + accVector;
     }
 
     void CameraLook()
@@ -91,7 +93,6 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && IsGrounded())
         {
-            Debug.Log(((KeyControl)context.control).keyCode);
             _rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
         }
     }
@@ -139,5 +140,15 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         ResetSpeed();
+    }
+
+    public void AddAccSpeed(Vector3 moveVec)
+    {
+        accVector = moveVec;
+    }
+
+    public void ResetAccSpeed()
+    {
+        accVector = Vector3.zero;
     }
 }
